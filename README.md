@@ -1,88 +1,77 @@
-\# TaskAPI
+# TaskAPI
 
+REST API za upravljanje zadacima s registracijom i prijavom korisnika. Napravljen u Pythonu s FastAPI-jem, SQLAlchemy-jem i SQLite bazom.
 
+## Mogućnosti
 
-Jednostavan REST API za upravljanje zadacima, napravljen u Pythonu s FastAPI-jem i SQLite bazom.
+- Registracija i prijava korisnika (JWT token)
+- Lozinke se čuvaju kao argon2 hash, nikad kao običan tekst
+- CRUD nad zadacima, svaki korisnik vidi i mijenja samo svoje
+- Validacija podataka preko Pydantic modela
+- Automatska dokumentacija na `/docs`
+- Automatski testovi (pytest)
 
+## Pokretanje
 
+1. Kloniraj repozitorij:
 
-\## Mogućnosti
+   git clone https://github.com/Nocturnal-exe/taskapi.git
+   cd taskapi
 
+2. Napravi i aktiviraj virtualno okruženje (Windows):
 
+   py -m venv venv
+   venv\Scripts\activate
 
-\- Dodavanje, pregled, izmjena i brisanje zadataka (CRUD)
+3. Instaliraj biblioteke:
 
-\- Validacija podataka preko Pydantic modela
+   pip install -r requirements.txt
 
-\- Trajno čuvanje u SQLite bazi preko SQLAlchemy-ja
+4. Napravi fajl `.env` s tajnim ključem:
 
-\- Automatska dokumentacija na `/docs`
+   SECRET_KEY=neki_dugacak_nasumican_niz_znakova
 
+   Ključ možeš generisati ovako:
 
+   py -c "import secrets; print(secrets.token_hex(32))"
 
-\## Pokretanje
+5. Pokreni server:
 
+   uvicorn main:app --reload
 
+6. Otvori `http://127.0.0.1:8000/docs` u browseru.
 
-1\. Kloniraj repozitorij:
+## Korištenje
 
+1. Registruj se preko POST /registracija
+2. Klikni Authorize i upiši korisničko ime i lozinku
+3. Koristi endpointe za zadatke
 
+## Endpointi
 
-&#x20;  git clone https://github.com/Nocturnal-exe/taskapi.git
+- POST /registracija: novi korisnik
+- POST /login: prijava, vraća token
+- GET /zadaci: lista mojih zadataka
+- GET /zadaci/{id}: jedan zadatak
+- POST /zadaci: novi zadatak
+- PUT /zadaci/{id}: izmjena zadatka
+- DELETE /zadaci/{id}: brisanje zadatka
 
-&#x20;  cd taskapi
+## Testovi
 
+pytest
 
+Testovi koriste privremenu bazu u memoriji, pa ne diraju pravu bazu.
 
-2\. Napravi i aktiviraj virtualno okruženje (Windows):
+## Struktura projekta
 
+- main.py: aplikacija i endpointi
+- auth.py: tokeni i provjera prijavljenog korisnika
+- database.py: veza s bazom
+- models.py: tabele u bazi
+- schemas.py: Pydantic modeli
+- tests/: automatski testovi
 
+## Tehnologije
 
-&#x20;  py -m venv venv
-
-&#x20;  venv\\Scripts\\activate
-
-
-
-3\. Instaliraj biblioteke:
-
-
-
-&#x20;  pip install -r requirements.txt
-
-
-
-4\. Pokreni server:
-
-
-
-&#x20;  uvicorn main:app --reload
-
-
-
-5\. Otvori `http://127.0.0.1:8000/docs` u browseru.
-
-
-
-\## Endpointi
-
-
-
-\- GET /zadaci: lista svih zadataka
-
-\- GET /zadaci/{id}: jedan zadatak
-
-\- POST /zadaci: novi zadatak
-
-\- PUT /zadaci/{id}: izmjena zadatka
-
-\- DELETE /zadaci/{id}: brisanje zadatka
-
-
-
-\## Tehnologije
-
-
-
-Python, FastAPI, SQLAlchemy, SQLite, Pydantic
-
+Python, FastAPI, SQLAlchemy, SQLite, Pydantic, JWT, pytest
