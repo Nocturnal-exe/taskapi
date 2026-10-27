@@ -1,42 +1,13 @@
 from fastapi import FastAPI, HTTPException, Depends
-from pydantic import BaseModel, ConfigDict
-from sqlalchemy import create_engine, Column, Integer, String, Boolean
-from sqlalchemy.orm import sessionmaker, declarative_base, Session
+from sqlalchemy.orm import Session
 
-engine = create_engine("sqlite:///zadaci.db", connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(bind=engine, autoflush=False)
-Base = declarative_base()
-
-
-class ZadatakDB(Base):
-    __tablename__ = "zadaci"
-
-    id = Column(Integer, primary_key=True, index=True)
-    naslov = Column(String, nullable=False)
-    zavrsen = Column(Boolean, default=False)
-
+from database import engine, Base, get_db
+from models import ZadatakDB
+from schemas import Zadatak, ZadatakUnos
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-class ZadatakUnos(BaseModel):
-    naslov: str
-    zavrsen: bool = False
-
-
-class Zadatak(ZadatakUnos):
-    id: int
-    model_config = ConfigDict(from_attributes=True)
 
 
 @app.get("/")
