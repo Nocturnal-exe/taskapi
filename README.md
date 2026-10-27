@@ -57,6 +57,15 @@ REST API za upravljanje zadacima s registracijom i prijavom korisnika. Napravlje
 - PUT /zadaci/{id}: izmjena zadatka
 - DELETE /zadaci/{id}: brisanje zadatka
 
+## Docker
+
+Projekat se može pokrenuti i u Docker kontejneru:
+
+   docker build -t taskapi .
+   docker run -p 8000:8000 -e SECRET_KEY=neki_tajni_kljuc taskapi
+
+Tajni ključ se šalje preko `-e`, jer se `.env` namjerno ne kopira u kontejner.
+
 ## Testovi
 
 pytest
