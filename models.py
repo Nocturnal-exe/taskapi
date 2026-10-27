@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
 from database import Base
 
 
@@ -16,3 +16,4 @@ class ZadatakDB(Base):
     id = Column(Integer, primary_key=True, index=True)
     naslov = Column(String, nullable=False)
     zavrsen = Column(Boolean, default=False)
+    vlasnik_id = Column(Integer, ForeignKey("korisnici.id"), nullable=False)
